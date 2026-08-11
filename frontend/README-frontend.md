@@ -1,10 +1,5 @@
-# Frontend README
+# Docker instructions for frontend
 
-This is the Vue 3 + Vite frontend for the job management demo.
+Build and serve static files via nginx when using Docker. The provided `frontend/Dockerfile` will perform a production build and place the built files into an nginx image.
 
-## Run
-1. cd frontend
-2. npm install
-3. npm run dev
-
-Open the Vite URL in your browser and the frontend will communicate with backend at http://localhost:8080/api
+When using docker-compose (root), the frontend will be reachable at http://localhost:5173

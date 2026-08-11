@@ -1,15 +1,13 @@
-# Backend README
+# Docker run instructions added
 
-This is the Spring Boot backend for the job management demo.
+## Docker (one-line)
+After adding auth / customizing .env (or using the supplied .env.example), run:
 
-## Run
-1. Configure `application.yml` with your DB credentials.
-2. Build: `mvn clean package`
-3. Run: `java -jar target/job-mgt-demo-0.0.1-SNAPSHOT.jar`
+  docker-compose up --build
 
-APIs:
-- POST /api/auth/register
-- POST /api/auth/login
-- GET /api/jobs
-- POST /api/jobs
-- POST /api/apply/{jobId}
+This will start three containers:
+- db (MySQL) -> port 3306
+- backend (Spring Boot) -> port 8080
+- frontend (nginx serving built Vue files) -> port 5173 (mapped to container 80)
+
+Front-end will be available at http://localhost:5173 and will communicate with backend at http://localhost:8080
