@@ -1,0 +1,465 @@
+/* ============================================================
+   global.css — 高校勤工助学岗位管理系统 全局主题样式
+   ============================================================
+   设计语言：红棕 / 米白 / 黑（纸质感 + 书页水平翻页动画）
+
+   如何在 Vue 中使用：
+   在 frontend/src/main.js 顶部（element-plus 样式之后）加入：
+     import './assets/global.css'
+
+   路由过渡（书页翻页动画）已配套实现，只需在 App.vue 中用
+   <transition name="page-flip" mode="out-in"> 包裹 <router-view>，
+   具体写法见本文件末尾的《如何在 Vue 中使用路由 transition》说明。
+   ============================================================ */
+
+/* ---------- 1. CSS 变量 ---------- */
+:root {
+  --color-primary: #8B3A3A;   /* 红棕（主色） */
+  --color-accent: #C66B5A;    /* 浅砖红（强调色） */
+  --color-bg: #FFF8F0;        /* 米白（页面/卡片底色） */
+  --color-card: #FFF8F0;      /* 卡片底色 */
+  --color-text: #0B0B0B;      /* 近黑（正文色） */
+  --shadow-strong: rgba(11, 11, 11, 0.12);
+  --spacing-unit: 8px;        /* 间距基准单位 */
+  --nav-gap: 32px;            /* 导航项间距 */
+  --nav-padding-x: 24px;      /* 导航项左右内边距 */
+
+  /* 派生的常用值（便于统一维护） */
+  --radius-card: 12px;
+  --radius-btn: 8px;
+  --radius-input: 8px;
+  --shadow-card: 0 12px 30px rgba(11, 11, 11, 0.06);
+  --shadow-btn: 0 6px 18px rgba(139, 58, 58, 0.12);
+  --muted: #8A8078;           /* 次要文字 */
+  --border-soft: rgba(11, 11, 11, 0.08);
+
+  /* 让 Element Plus 组件主题色跟随红棕主色 */
+  --el-color-primary: #8B3A3A;
+  --el-color-primary-light-3: #A65A50;
+  --el-color-primary-light-5: #C0806F;
+  --el-color-primary-light-7: #D9AFA1;
+  --el-color-primary-light-8: #E5C3B8;
+  --el-color-primary-light-9: #F2E2DB;
+  --el-color-primary-dark-2: #6E2C2C;
+}
+
+/* ---------- 2. 基础页面与容器 ---------- */
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft Yahei", "PingFang SC", "Noto Sans SC", Arial, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+  /* 纸张微粒质感：极浅的径向细点纹理 */
+  background-image:
+    radial-gradient(rgba(139, 58, 58, 0.025) 1px, transparent 1.5px);
+  background-size: 5px 5px;
+}
+
+a { color: var(--color-primary); }
+
+/* 统一容器：最大 1200px、居中、左右内边距 16px */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* 居中卡片（登录 / 注册） */
+.auth-card { max-width: 420px; margin: 40px auto; }
+/* 较宽的居中卡片（发布岗位） */
+.wide-card  { max-width: 700px; margin: 20px auto; }
+
+/* ---------- 3. 全局间距工具（--spacing-unit=8px 的倍数） ---------- */
+/* .gap-1=8px .gap-2=16px .gap-3=24px .gap-4=32px；mt/mb 同理 */
+.gap-1 { gap: 8px; }    .gap-2 { gap: 16px; }
+.gap-3 { gap: 24px; }   .gap-4 { gap: 32px; }
+.mt-1 { margin-top: 8px; }   .mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }  .mt-4 { margin-top: 32px; }
+.mb-1 { margin-bottom: 8px; } .mb-2 { margin-bottom: 16px; }
+.mb-3 { margin-bottom: 24px; } .mb-4 { margin-bottom: 32px; }
+
+.muted { color: var(--muted); }
+
+/* ---------- 4. 导航样式 ---------- */
+.app-header {
+  height: 64px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nav-gap);
+  background: var(--color-bg);   /* 极浅米白 */
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+
+/* 导航条：flex 水平排列，项间 gap=32px */
+.nav-bar {
+  display: flex;
+  align-items: center;
+  height: 64px;
+  gap: var(--nav-gap);
+  background: transparent;
+  overflow-x: auto;   /* 窄屏时允许横向滚动，避免挤压 */
+  scrollbar-width: none;
+}
+.nav-bar::-webkit-scrollbar { display: none; }
+
+/* 单个导航链接：左右 padding=24px，悬浮阴影 + 圆角 */
+.nav-link {
+  position: relative;
+  padding: 0 var(--nav-padding-x);
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 64px;   /* 撑满导航高度，让下划条贴底 */
+  border-radius: 10px;
+  white-space: nowrap;
+  transition: transform 180ms ease, box-shadow 180ms ease, color 180ms ease;
+}
+/* 悬停：轻微放大 + 浮动阴影 */
+.nav-link:hover {
+  transform: scale(1.03);
+  text-decoration: none;
+  box-shadow: 0 6px 18px var(--shadow-strong);
+}
+/* 下划条基础：3px 高实心条，默认隐藏 */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: var(--nav-padding-x);
+  right: var(--nav-padding-x);
+  bottom: 8px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 180ms ease;
+}
+.nav-link:hover::after { transform: scaleX(1); }
+/* 激活态（精确匹配当前路由）：文字加粗 + 主题色 + 4px 实心下划条 */
+.nav-link.router-link-exact-active { font-weight: 600; color: var(--color-primary); }
+.nav-link.router-link-exact-active::after {
+  transform: scaleX(1);
+  height: 4px;
+}
+/* 导航图标与文字间距 */
+.nav-link .el-icon { margin-right: 6px; vertical-align: -2px; }
+
+/* 右上角用户区 */
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+}
+.user-name { color: var(--color-text); }
+.nav-ghost { color: var(--color-text); }
+
+/* ---------- 5. 主按钮（.el-button--primary）覆盖 ---------- */
+.el-button--primary {
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-btn);
+  box-shadow: var(--shadow-btn);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+/* 默认尺寸按钮应用 10px 18px 内边距（mini/small 保持自身紧凑尺寸） */
+.el-button--primary.el-button--default { padding: 10px 18px; }
+.el-button--primary.el-button--mini { padding: 6px 12px; border-radius: 6px; }
+.el-button--primary.el-button--small { padding: 8px 14px; }
+
+.el-button--primary:hover,
+.el-button--primary:focus {
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  color: #fff;
+  border: none;
+  transform: translateY(-2px);          /* 悬停上浮 */
+  box-shadow: 0 8px 22px rgba(139, 58, 58, 0.20);
+}
+.el-button--primary:active { transform: translateY(0); }
+
+/* ---------- 6. 卡片与表格 ---------- */
+.el-card {
+  position: relative;   /* ::after 边缘线的定位基准 */
+  background: var(--color-card);
+  border: none;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+.el-card__body { padding: 20px; }
+
+/* 表格圆角 + 表头米棕底 */
+.el-table {
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+.el-table th.el-table__cell {
+  background: rgba(139, 58, 58, 0.06);
+  color: var(--color-text);
+  font-weight: 600;
+}
+/* 表格行 hover：米白渐变 */
+.el-table .el-table__row:hover > td.el-table__cell {
+  background: linear-gradient(90deg, rgba(255, 248, 240, 0.6), rgba(255, 248, 240, 0.2)) !important;
+}
+
+/* ---------- 7. 表单与输入 ---------- */
+.el-input__wrapper,
+.el-select__wrapper {
+  border-radius: var(--radius-input);
+}
+/* focus 时使用弱化的 --color-accent 半透明描边 */
+.el-input__wrapper.is-focus,
+.el-select__wrapper.is-focus {
+  box-shadow: 0 0 0 1px rgba(198, 107, 90, 0.5) inset !important;
+}
+
+/* 分页激活色跟随主色 */
+.el-pagination.is-background .el-pager li.is-active {
+  background-color: var(--color-primary);
+}
+
+/* ---------- 8. 纸质/质感效果 ---------- */
+/* 卡片边缘极细线性渐变边（内阴影）增强纸张边缘感 */
+.el-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-card);
+  box-shadow: inset 0 0 0 1px rgba(139, 58, 58, 0.08);
+  pointer-events: none;
+}
+
+/* ---------- 9. 书页水平翻页路由动画 ----------
+   适配 Vue 路由 <transition name="page-flip" mode="out-in">
+   ------------------------------------------------------------ */
+.page-flip-wrapper {
+  perspective: 1200px;
+  -webkit-perspective: 1200px;
+  overflow: visible;
+}
+
+.page-flip-enter-active,
+.page-flip-leave-active {
+  transition: transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 300ms ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* 进入：从右侧像翻书一样翻开 */
+.page-flip-enter-from {
+  transform-origin: right center;
+  transform: rotateY(-95deg) scale(0.98);
+  opacity: 0;
+  backface-visibility: hidden;
+}
+.page-flip-enter-to {
+  transform-origin: right center;
+  transform: rotateY(0deg) scale(1);
+  opacity: 1;
+  backface-visibility: hidden;
+}
+
+/* 离开：向左侧合拢翻走 */
+.page-flip-leave-from {
+  transform-origin: left center;
+  transform: rotateY(0deg) scale(1);
+  opacity: 1;
+  backface-visibility: hidden;
+}
+.page-flip-leave-to {
+  transform-origin: left center;
+  transform: rotateY(95deg) scale(0.98);
+  opacity: 0;
+  backface-visibility: hidden;
+}
+
+/* 翻页阴影层：动画过程中加深，增强立体感 */
+.page-flip-shadow { position: relative; }
+.page-flip-shadow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.16));
+  opacity: 0;
+  transition: opacity 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+  z-index: 2;
+}
+.page-flip-shadow.page-flip-enter-active::before,
+.page-flip-shadow.page-flip-leave-active::before {
+  opacity: 0.35;
+}
+
+/* ---------- 10. 响应式与降级 ---------- */
+@media (max-width: 768px) {
+  :root { --nav-gap: 16px; --nav-padding-x: 12px; }
+  .brand { display: none; }               /* 窄屏隐藏品牌文字，节省空间 */
+  .app-header { padding: 0 12px; gap: 12px; }
+}
+
+@media (max-width: 480px) {
+  /* 窄屏：关闭 3D 翻页，退化为淡入 + 轻微平移 */
+  .page-flip-enter-active,
+  .page-flip-leave-active {
+    transition: transform 300ms ease, opacity 300ms ease;
+  }
+  .page-flip-enter-from,
+  .page-flip-enter-to,
+  .page-flip-leave-from,
+  .page-flip-leave-to {
+    transform-origin: initial;
+    transform-style: initial;
+    backface-visibility: visible;
+  }
+  .page-flip-enter-from { transform: translateX(8px); opacity: 0; }
+  .page-flip-leave-to   { transform: translateX(-8px); opacity: 0; }
+  .page-flip-shadow.page-flip-enter-active::before,
+  .page-flip-shadow.page-flip-leave-active::before { opacity: 0.12; }
+}
+
+/* 系统偏好「减弱动态」：完全禁用翻页，仅淡入淡出 */
+@media (prefers-reduced-motion: reduce) {
+  .page-flip-enter-active,
+  .page-flip-leave-active {
+    transition: opacity 300ms ease !important;
+    transform: none !important;
+  }
+  .page-flip-enter-from,
+  .page-flip-enter-to,
+  .page-flip-leave-from,
+  .page-flip-leave-to {
+    transform: none !important;
+    backface-visibility: visible !important;
+  }
+  .nav-link, .el-button--primary { transition: none !important; }
+}
+
+
+/* ============================================================
+   附：《如何在 Vue 中使用路由 transition》
+   ============================================================
+   本动画依赖 Vue 的 <transition> 组件，name 必须与本 CSS 一致
+   （"page-flip"），且建议使用 mode="out-in"（旧页先离开，新页再进入），
+   这样才能让两页在同一根轴上完成翻书效果而不重叠。
+
+   ① 在 frontend/src/main.js 中引入本样式：
+     import './assets/global.css'
+
+   ② 在 App.vue 的 <router-view> 外套一层 <transition>：
+   ------------------------------------------------------------
+     <el-main class="page-flip-wrapper">          <!-- 提供 perspective 视场 -->
+       <router-view v-slot="{ Component }">
+         <transition name="page-flip" mode="out-in">
+           <div class="page-flip-shadow" :key="$route.path">
+             <component :is="Component" />
+           </div>
+         </transition>
+       </router-view>
+     </el-main>
+   ------------------------------------------------------------
+   -  :key="$route.path"  让路由变化时产生新的包裹元素，从而触发动画
+   -  .page-flip-wrapper  提供 1200px 透视与 overflow: visible
+   -  .page-flip-shadow   承载翻页时右侧渐浓的阴影（伪元素实现）
+   -  窄屏（≤480px）或系统开启「减弱动态」时自动退化为淡入平移，
+     不会让对动画敏感的用户产生眩晕。
+
+   进阶：若希望某些页面之间不翻页，可把 <transition> 改名为
+   <transition name="fade"> 或去掉，不影响功能。
+   ============================================================ */
+
+/* ---------- 11. 登录/注册一体化弹窗（AuthModal） ---------- */
+/* 遮罩：半透明红棕（满足"背景遮罩层半透明"） */
+.auth-mask .v-modal { background: rgba(91, 36, 30, 0.45); }
+
+/* 弹窗本体：480px 宽（≥480 需求）、红棕圆角、窄屏兜底 */
+.auth-modal {
+  --el-dialog-border-radius: var(--radius-card);
+  max-width: calc(100vw - 24px);
+}
+.auth-modal .el-dialog__header { display: none; }
+.auth-modal .el-dialog__body { padding: 8px 24px 20px; }
+
+.auth-modal-header {
+  position: relative;
+  text-align: center;
+  padding: 8px 0 16px;
+}
+.auth-modal-header .auth-brand {
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 2px;
+  color: var(--color-primary);
+}
+.auth-modal-header .auth-sub { margin-top: 4px; font-size: 13px; }
+.auth-close {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: color 180ms ease, background 180ms ease;
+}
+.auth-close:hover { color: var(--color-primary); background: rgba(139, 58, 58, 0.08); }
+
+.auth-body { min-height: 240px; }
+
+.auth-submit { width: 100%; letter-spacing: 3px; margin-top: 6px; }
+
+.auth-footer {
+  text-align: center;
+  color: var(--muted);
+  padding-top: 10px;
+  border-top: 1px solid var(--border-soft);
+  margin-top: 4px;
+}
+.auth-footer a {
+  color: var(--color-primary);
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 2px;
+}
+
+/* 登录 ↔ 注册 平滑过渡 */
+.auth-switch-enter-active,
+.auth-switch-leave-active {
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+.auth-switch-enter-from { opacity: 0; transform: translateX(28px); }
+.auth-switch-leave-to   { opacity: 0; transform: translateX(-28px); }
+
+/* ---------- 12. 未登录封面（preview.jpg 覆盖内容层） ---------- */
+/* 未登录时用预览图铺满主内容区，隐藏一切业务数据；登录弹窗悬浮其上。
+   position:fixed 且置于 el-container 直接子级（避开 .page-flip-wrapper 的
+   perspective 造成的包含块），从 header(64px) 下方开始铺满。 */
+.auth-cover {
+  position: fixed;
+  top: 64px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;   /* 高于页面内容，低于登录弹窗遮罩(2000) */
+  background: #23120f url('/preview.jpg') center center / cover no-repeat;
+}
