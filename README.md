@@ -3,7 +3,7 @@
 > 本科毕业设计配套的**可运行系统 Demo** —— 基于 Spring Boot 3 + Vue 3 + MySQL 8 的前后端分离实现，
 > 覆盖勤工助学岗位「发布 → 申请 → 审核 → 排班 → 统计」的完整业务闭环，内置 50 名学生的演示数据，开箱即可演示。
 
-![系统预览](frontend/public/preview.jpg)
+![系统截图 · 管理端查看学生申请](docs/screenshot.png)
 
 ---
 
@@ -127,10 +127,11 @@ Work-Study/
 │   │   ├── assets/global.css
 │   │   ├── App.vue
 │   │   └── main.js
-│   ├── public/preview.jpg
+│   ├── public/preview.jpg            # 未登录封面背景图（应用运行时使用，非截图）
 │   ├── nginx.conf                    # SPA 回退 + 静态资源
 │   ├── Dockerfile
 │   └── package.json
+├── docs/screenshot.png               # 系统运行截图（README 配图）
 ├── database/job_mgt.sql              # 数据库完整备份（含全部演示数据）
 ├── seed-data.sql                     # 种子数据（仅用于全新空库）
 ├── docker-compose.yml                # 三容器编排
